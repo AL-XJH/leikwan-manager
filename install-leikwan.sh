@@ -8,7 +8,6 @@
 
 set -e
 
-# --- 基础信息（部署到 GitHub 后修改为你的仓库地址）---
 INSTALL_VERSION="1.3"
 MAIN_URL="https://raw.githubusercontent.com/AL-XJH/leikwan-manager/main/LeiKwanManager.sh"
 WG_URL="https://raw.githubusercontent.com/AL-XJH/leikwan-manager/main/wg-liqun.sh"
