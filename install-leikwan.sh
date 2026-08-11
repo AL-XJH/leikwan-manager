@@ -8,6 +8,7 @@
 
 set -e
 
+# --- 基础信息（部署到 GitHub 后修改为你的仓库地址）---
 INSTALL_VERSION="1.3"
 MAIN_URL="https://raw.githubusercontent.com/AL-XJH/leikwan-manager/main/LeiKwanManager.sh"
 WG_URL="https://raw.githubusercontent.com/AL-XJH/leikwan-manager/main/wg-liqun.sh"
@@ -28,8 +29,10 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-# 先恢复终端输入，防止管道执行时 read 拿不到键盘
-exec 0< /dev/tty 2>/dev/null || true
+# 注意：这里【不要】执行 exec 0< /dev/tty。
+# 当本安装器被 `curl URL | bash` 管道执行时，bash 正从管道读脚本，
+# 若此刻把 stdin 切到 /dev/tty，bash 就读不到剩余脚本内容而卡死。
+# 安装器本身无键盘输入；需要终端的是主脚本，在最后的 exec 里显式 < /dev/tty 即可。
 
 echo
 info "利群管家一键安装脚本 v${INSTALL_VERSION}"
@@ -68,5 +71,8 @@ fi
 echo
 info "安装完成！正在启动利群管家菜单..."
 
-# 以磁盘文件方式 exec 主脚本（stdin 已恢复为 /dev/tty，菜单 read 正常工作）
-exec bash "$MAIN_INSTALL_PATH"
+# 以磁盘文件方式 exec 主脚本，并显式把 stdin 指向终端。
+# 这样即使安装器本身是被 `curl | bash` 管道执行的，
+# 主脚本的菜单 read 也能从键盘读到输入。
+# （无 tty 的环境（如纯后台）fallback 到直接执行，主脚本会自动检测。）
+exec bash "$MAIN_INSTALL_PATH" < /dev/tty 2>/dev/null || exec bash "$MAIN_INSTALL_PATH"
