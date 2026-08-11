@@ -71,8 +71,13 @@ fi
 echo
 info "安装完成！正在启动利群管家菜单..."
 
-# 以磁盘文件方式 exec 主脚本，并显式把 stdin 指向终端。
-# 这样即使安装器本身是被 `curl | bash` 管道执行的，
-# 主脚本的菜单 read 也能从键盘读到输入。
-# （无 tty 的环境（如纯后台）fallback 到直接执行，主脚本会自动检测。）
-exec bash "$MAIN_INSTALL_PATH" < /dev/tty 2>/dev/null || exec bash "$MAIN_INSTALL_PATH"
+# 以磁盘文件方式 exec 主脚本，并显式把 stdin 指向终端，
+# 这样即使安装器是被 `curl | bash` 管道执行的，主脚本菜单 read 也能从键盘读到输入。
+# 注意：启动时【不能】对 stderr 做 2>/dev/null —— 菜单的 `read -p` 提示符是输出到
+# stderr 的，一旦被重定向就会导致“看不见 请输入选项:”。这里用 /dev/tty 是否存在来判断，
+# 而不是用错误抑制。
+if [[ -r /dev/tty ]]; then
+    exec bash "$MAIN_INSTALL_PATH" < /dev/tty
+else
+    exec bash "$MAIN_INSTALL_PATH"
+fi
