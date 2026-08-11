@@ -208,7 +208,7 @@ fi
 if [[ -z "${1:-}" && ! -t 0 ]]; then
     if [[ "$(basename "$0" 2>/dev/null)" == "bash" || "$(basename "$0" 2>/dev/null)" == "sh" ]]; then
         echo -e "${YELLOW}检测到直接管道运行主脚本。为避免菜单无法读取键盘，请使用一键安装：${NC}"
-        echo "  curl -fsSL https://raw.githubusercontent.com/你的用户名/你的仓库/main/install-leikwan.sh | bash"
+        echo "  curl -fsSL https://raw.githubusercontent.com/AL-XJH/leikwan-manager/main/install-leikwan.sh | bash"
         exit 1
     else
         # 脚本在磁盘上由安装器 exec 执行，安全恢复终端输入

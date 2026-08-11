@@ -134,7 +134,7 @@ fi
 if [[ -z "${1:-}" && ! -t 0 ]]; then
     if [[ "$(basename "$0" 2>/dev/null)" == "bash" || "$(basename "$0" 2>/dev/null)" == "sh" ]]; then
         echo -e "${YELLOW}检测到直接管道运行本脚本。为避免菜单无法读取键盘，请先下载到本地再执行：${NC}"
-        echo "  curl -fsSL -o /usr/local/bin/wg-liqun.sh <脚本地址> && bash /usr/local/bin/wg-liqun.sh"
+        echo "  curl -fsSL -o /usr/local/bin/wg-liqun.sh https://raw.githubusercontent.com/AL-XJH/leikwan-manager/main/wg-liqun.sh && bash /usr/local/bin/wg-liqun.sh"
         exit 1
     else
         exec 0< /dev/tty 2>/dev/null || true
